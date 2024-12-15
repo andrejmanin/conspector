@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import user_router as UserRouter
 from routers import topic_router as TopicRouter
 from db.database import SessionLocal, engine, base
+from fastapi.staticfiles import StaticFiles
 
 base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -22,6 +23,8 @@ app.add_middleware(
 
 app.include_router(UserRouter.router, prefix="/user")
 app.include_router(TopicRouter.router, prefix="/topic")
+
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 if __name__ == "__main__":
    uvicorn.run("main:app", host="127.0.0.1", port=1407, reload=True, workers=3)
